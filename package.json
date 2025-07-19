@@ -1,0 +1,29 @@
+{
+  "name": "lllll",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch api/index.ts",
+    "vercel:dev": "vercel dev",
+    "vercel:deploy": "vercel",
+    "drizzle": "drizzle-kit"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.16.0",
+    "@hono/zod-validator": "^0.7.1",
+    "@types/pg": "^8.15.4",
+    "@vercel/postgres": "^0.10.0",
+    "dayjs": "^1.11.13",
+    "dotenv": "^17.2.0",
+    "drizzle-orm": "^0.44.3",
+    "hono": "^4.8.5",
+    "pg": "^8.16.3",
+    "zod": "^4.0.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "drizzle-kit": "^0.31.4",
+    "tsx": "^4.7.1",
+    "typescript": "^5.8.3",
+    "vercel": "^44.4.3"
+  }
+}
