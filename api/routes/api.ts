@@ -25,6 +25,17 @@ apiRouter.get("/student", async (c) => {
   return c.json(allStudent);
 });
 
+apiRouter.get("/:studentId", async (c) => {
+  const studentId = c.req.param("studentId");
+  const result = await drizzle.query.students.findFirst({
+    where: eq(students.studentId, studentId),
+  });
+  if (!result) {
+    return c.json({ error: "Student not found" }, 404);
+  }
+  return c.json(result);
+});
+
 apiRouter.post("/student", async (c) => {
   const body = await c.req.json(); 
   if (typeof body !== 'object' || body === null) {
