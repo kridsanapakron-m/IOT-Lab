@@ -19,6 +19,10 @@ apiRouter.use(
   })
 );
 
+apiRouter.get("/", (c) => {
+  return c.json({ message: "Student API" });
+});
+
 apiRouter.get("/student", async (c) => {
   const allStudent = await drizzle.select().from(students);
   return c.json(allStudent);
@@ -52,9 +56,5 @@ apiRouter.post("/student",
     return c.json({ success: true, book: result[0] }, 201);
   }
 );
-
-apiRouter.get("/", (c) => {
-  return c.json({ message: "Student API" });
-});
 
 export default apiRouter;
