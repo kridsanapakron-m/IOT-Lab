@@ -24,7 +24,7 @@ apiRouter.get("/student", async (c) => {
   return c.json(allStudent);
 });
 
-apiRouter.post("/",
+apiRouter.post("/student",
   zValidator("json",z.object({
       firstName: z.string().min(1),
       lastName: z.string().min(1),
