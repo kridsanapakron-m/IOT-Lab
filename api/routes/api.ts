@@ -25,7 +25,7 @@ apiRouter.get("/student", async (c) => {
   return c.json(allStudent);
 });
 
-apiRouter.get("/:studentId", async (c) => {
+apiRouter.get("/student/:studentId", async (c) => {
   const studentId = c.req.param("studentId");
   const result = await drizzle.query.students.findFirst({
     where: eq(students.studentId, studentId),
