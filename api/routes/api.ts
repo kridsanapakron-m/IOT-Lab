@@ -119,5 +119,13 @@ apiRouter.patch("/student/:studentId", async (c) => {
   return c.json({ success: true, student: updated[0] });
 });
 
+apiRouter.delete("/student/:studentId", async (c) => {
+  const studentId = c.req.param("studentId");
+  const deleted = await drizzle.delete(students).where(eq(students.studentId, studentId)).returning();
+  if (deleted.length === 0) {
+    return c.json({ error: "Book not found" }, 404);
+  }
+  return c.json({ success: true, book: deleted[0] });
+});
 
 export default apiRouter;
