@@ -3,7 +3,7 @@ import { bearerAuth } from "hono/bearer-auth";
 import { env } from "hono/adapter";
 import drizzle from "../db/drizzle.js";
 import { students } from "../db/schema.js";
-import { zValidator } from "@hono/zod-validator";
+// import { zValidator } from "@hono/zod-validator";
 // import z from "zod";
 
 
