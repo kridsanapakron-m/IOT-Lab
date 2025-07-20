@@ -71,12 +71,12 @@ apiRouter.post("/student", async (c) => {
   return c.json({ success: true, students: result[0] }, 201);
 });
 
-apiRouter.patch("/student/:id", async (c) => {
+apiRouter.patch("/student/:studentId", async (c) => {
   const body = await c.req.json();
-  const id = Number(c.req.param("id"));
+  const studentId = c.req.param("studentId");
 
-  if (isNaN(id)) {
-    return c.json({ success: false, message: "Invalid student ID" }, 400);
+  if (typeof studentId !== "string" || studentId.trim() === "") {
+    return c.json({ success: false, message: "Invalid studentId" }, 400);
   }
 
   const updates: any = {};
@@ -109,7 +109,7 @@ apiRouter.patch("/student/:id", async (c) => {
   const updated = await drizzle
     .update(students)
     .set(updates)
-    .where(eq(students.id,id))
+    .where(eq(students.studentId, studentId))
     .returning();
 
   if (updated.length === 0) {
