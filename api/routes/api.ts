@@ -3,9 +3,8 @@ import { bearerAuth } from "hono/bearer-auth";
 import { env } from "hono/adapter";
 import drizzle from "../db/drizzle.js";
 import { students } from "../db/schema.js";
-import { zValidator } from "@hono/zod-validator";
-import z from "zod";
 const apiRouter = new Hono();
+
 apiRouter.get("/", (c) => {
   return c.json({ message: "Student API" });
 });
@@ -25,33 +24,50 @@ apiRouter.get("/student", async (c) => {
   return c.json(allStudent);
 });
 
-apiRouter.post("/student",
-  zValidator("json",z.object({
-      firstName: z.string().min(1),
-      lastName: z.string().min(1),
-      studentId: z.string().min(1),
-      birthDate: z.preprocess((arg) => {
-        if (typeof arg === "string" || arg instanceof Date) return new Date(arg);
-        return arg;
-      }, z.date()),
-      gender: z.string().min(1),
-    })
-  ),
-  async (c) => {
-    const { firstName, lastName, studentId, birthDate, gender } = c.req.valid("json");
-    const birthDateString = birthDate.toISOString().split('T')[0]; 
-    const result = await drizzle
-      .insert(students)
-      .values({
-        firstName,
-        lastName,
-        studentId,
-        birthDate: birthDateString,
-        gender,
-      })
-      .returning();
-    return c.json({ success: true, students: result[0] }, 201);
+apiRouter.post("/student", async (c) => {
+  const body = await c.req.json(); 
+  if (typeof body !== 'object' || body === null) {
+    return c.json({ success: false, message: "Invalid request body format" }, 400);
   }
-);
+  const { firstName, lastName, studentId, birthDate, gender } = body;
+  if (typeof firstName !== 'string' || firstName.length === 0) {
+    return c.json({ success: false, message: "firstName is required and must be a non-empty string" }, 400);
+  }
+  if (typeof lastName !== 'string' || lastName.length === 0) {
+    return c.json({ success: false, message: "lastName is required and must be a non-empty string" }, 400);
+  }
+  if (typeof studentId !== 'string' || studentId.length === 0) {
+    return c.json({ success: false, message: "studentId is required and must be a non-empty string" }, 400);
+  }
+  let parsedBirthDate: Date | null = null;
+  if (typeof birthDate === 'string') {
+    try {
+      parsedBirthDate = new Date(birthDate);
+      if (isNaN(parsedBirthDate.getTime())) {
+        throw new Error("Invalid date format");
+      }
+    } catch (e) {
+      return c.json({ success: false, message: "birthDate must be a valid date string (e.g., YYYY-MM-DD)" }, 400);
+    }
+  } else {
+    return c.json({ success: false, message: "birthDate must be a date string" }, 400);
+  }
+
+  if (typeof gender !== 'string' || gender.length === 0) {
+    return c.json({ success: false, message: "gender is required and must be a non-empty string" }, 400);
+  }
+  const birthDateString = parsedBirthDate!.toISOString().split('T')[0];
+  const result = await drizzle
+    .insert(students)
+    .values({
+      firstName,
+      lastName,
+      studentId,
+      birthDate: birthDateString,
+      gender,
+    })
+    .returning();
+  return c.json({ success: true, students: result[0] }, 201);
+});
 
 export default apiRouter;
