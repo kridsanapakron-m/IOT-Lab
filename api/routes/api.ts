@@ -10,7 +10,7 @@ import dayjs from "dayjs";
 const apiRouter = new Hono();
 
 apiRouter.use(
-  "/student",
+  "/*",
   bearerAuth({
     verifyToken: async (token, c) => {
       const { API_SECRET } = env<{ API_SECRET: string }>(c);
