@@ -4,8 +4,8 @@ import { env } from "hono/adapter";
 import drizzle from "../db/drizzle.js";
 import { students } from "../db/schema.js";
 import { zValidator } from "@hono/zod-validator";
-import z from "zod";
-import dayjs from "dayjs";
+// import z from "zod";
+
 
 const apiRouter = new Hono();
 
@@ -28,33 +28,33 @@ apiRouter.get("/student", async (c) => {
   return c.json(allStudent);
 });
 
-apiRouter.post("/student",
-  zValidator("json",z.object({
-      firstName: z.string().min(1),
-      lastName: z.string().min(1),
-      studentId: z.string().min(1),
-      birthDate: z.preprocess((arg) => {
-        if (typeof arg === "string" || arg instanceof Date) return new Date(arg);
-        return arg;
-      }, z.date()),
-      gender: z.string().min(1),
-    })
-  ),
-  async (c) => {
-    const { firstName, lastName, studentId, birthDate, gender } = c.req.valid("json");
-    const birthDateString = birthDate.toISOString().split('T')[0]; 
-    const result = await drizzle
-      .insert(students)
-      .values({
-        firstName,
-        lastName,
-        studentId,
-        birthDate: birthDateString,
-        gender,
-      })
-      .returning();
-    return c.json({ success: true, book: result[0] }, 201);
-  }
-);
+// apiRouter.post("/student",
+//   zValidator("json",z.object({
+//       firstName: z.string().min(1),
+//       lastName: z.string().min(1),
+//       studentId: z.string().min(1),
+//       birthDate: z.preprocess((arg) => {
+//         if (typeof arg === "string" || arg instanceof Date) return new Date(arg);
+//         return arg;
+//       }, z.date()),
+//       gender: z.string().min(1),
+//     })
+//   ),
+//   async (c) => {
+//     const { firstName, lastName, studentId, birthDate, gender } = c.req.valid("json");
+//     const birthDateString = birthDate.toISOString().split('T')[0]; 
+//     const result = await drizzle
+//       .insert(students)
+//       .values({
+//         firstName,
+//         lastName,
+//         studentId,
+//         birthDate: birthDateString,
+//         gender,
+//       })
+//       .returning();
+//     return c.json({ success: true, book: result[0] }, 201);
+//   }
+// );
 
 export default apiRouter;
