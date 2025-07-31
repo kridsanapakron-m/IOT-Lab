@@ -8,8 +8,8 @@ const app = new Hono().basePath("/api");
 app.use(
   "*",
   cors({
-    origin: "http://localhost:3000",
-    allowHeaders: ["Content-Type"],
+    origin: ["http://localhost:3000", "http://localhost:5173"],
+    allowHeaders: ["Content-Type", "Authorization"],
     allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   })
 );
