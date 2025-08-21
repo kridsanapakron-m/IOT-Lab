@@ -300,7 +300,6 @@ apiRouter.delete("/coffee/:id", async (c) => {
   return c.json({ success: true, coffee: deleted[0] });
 });
 
-// GET all coffee types
 apiRouter.get("/getcoffeetype", async (c) => {
   const types = await drizzle.select({ type: typecoffee.type }).from(typecoffee);
   return c.json(types.map(row => row.type));
