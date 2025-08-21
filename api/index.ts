@@ -8,8 +8,7 @@ const app = new Hono().basePath("/api");
 app.use(
   "*",
   cors({
-    origin: ["http://localhost:3000", "http://localhost:5173", "https://iot-lab-2-git-main-kridsanapakrons-projects.vercel.app"],
-    allowHeaders: ["Content-Type", "Authorization"],
+    origin: ["http://localhost:3000", "http://localhost:5173", "https://iot-lab-2-git-main-kridsanapakrons-projects.vercel.app", "https://iot-lab-ten.vercel.app"],
     allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   })
 );
